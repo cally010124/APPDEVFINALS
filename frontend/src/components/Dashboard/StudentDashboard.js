@@ -259,7 +259,7 @@ const StudentDashboard = () => {
                 </tbody>
               </table>
             )}
-        </div>
+          </div>
         {/* GWA display moved inside container */}
         <div className="ptc-gwa-display">
           <strong>GWA: {computeGWA()}</strong>

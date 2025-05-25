@@ -20,6 +20,9 @@ const GradeManagement = () => {
   const [editGrade, setEditGrade] = useState('');
   const [editRemarks, setEditRemarks] = useState('');
   const [editUnits, setEditUnits] = useState('');
+  const [copying, setCopying] = useState(false);
+  const [sourceStudentId, setSourceStudentId] = useState('');
+  const [targetStudentId, setTargetStudentId] = useState('');
 
   // Add S.Y. state globally for the component, persisted in localStorage and synced with backend
   const LOCAL_STORAGE_SY_KEY = 'grades_sy_value';
@@ -155,7 +158,7 @@ const GradeManagement = () => {
         student_id: filteredStudents[0].student_id,
         subject_code: newSubjectCode,
         subject: newSubject,
-        grade: newGrade,
+        grade: newGrade || 'N/A',
         remarks: newRemarks,
         units: newUnits
       }, {
@@ -190,7 +193,7 @@ const GradeManagement = () => {
       await axios.put(`http://localhost:5000/api/grades/${editId}`, {
         subject_code: editSubjectCode,
         subject: editSubject,
-        grade: editGrade,
+        grade: editGrade || 'N/A',
         remarks: editRemarks,
         units: editUnits
       }, {
@@ -270,6 +273,47 @@ const GradeManagement = () => {
     saveSy();
   };
 
+  const handleCopySubjects = async () => {
+    if (!sourceStudentId || !targetStudentId) {
+      alert('Please select both source and target students');
+      return;
+    }
+
+    if (sourceStudentId === targetStudentId) {
+      alert('Source and target students cannot be the same');
+      return;
+    }
+
+    setCopying(true);
+    try {
+      const token = localStorage.getItem('token');
+      // Get source student's grades
+      const sourceGrades = grades.filter(g => g.student_id === sourceStudentId);
+      
+      // Create new grades for target student
+      for (const grade of sourceGrades) {
+        await axios.post('http://localhost:5000/api/grades', {
+          student_id: targetStudentId,
+          subject_code: grade.subject_code,
+          subject: grade.subject,
+          grade: 'N/A',
+          remarks: '',
+          units: grade.units
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+      
+      alert('Subjects copied successfully!');
+      await fetchGrades();
+    } catch (err) {
+      alert('Failed to copy subjects');
+    }
+    setCopying(false);
+    setSourceStudentId('');
+    setTargetStudentId('');
+  };
+
   // Debug logs
   console.log('Students:', students);
   console.log('Filtered:', filteredStudents);
@@ -297,6 +341,46 @@ const GradeManagement = () => {
           <span style={{ color: 'green', fontSize: 20, marginLeft: 4 }} title="Saved">&#10003;</span>
         )}
       </div>
+
+      {/* Copy Subjects Section */}
+      <div className="row mb-3 justify-content-center">
+        <div className="col-12 d-flex justify-content-center gap-2">
+          <select
+            className="form-control"
+            style={{ maxWidth: 200 }}
+            value={sourceStudentId}
+            onChange={(e) => setSourceStudentId(e.target.value)}
+          >
+            <option value="">Select Source Student</option>
+            {students.map(student => (
+              <option key={student.student_id} value={student.student_id}>
+                {student.name} ({student.student_id})
+              </option>
+            ))}
+          </select>
+          <select
+            className="form-control"
+            style={{ maxWidth: 200 }}
+            value={targetStudentId}
+            onChange={(e) => setTargetStudentId(e.target.value)}
+          >
+            <option value="">Select Target Student</option>
+            {students.map(student => (
+              <option key={student.student_id} value={student.student_id}>
+                {student.name} ({student.student_id})
+              </option>
+            ))}
+          </select>
+          <button
+            className="btn btn-primary"
+            onClick={handleCopySubjects}
+            disabled={copying || !sourceStudentId || !targetStudentId}
+          >
+            {copying ? 'Copying...' : 'Copy Subjects'}
+          </button>
+        </div>
+      </div>
+
       {/* Filters */}
       <div className="row mb-3 justify-content-center">
         <div className="col-12 d-flex justify-content-center">
@@ -363,7 +447,6 @@ const GradeManagement = () => {
                             className="form-control"
                             value={editGrade}
                             onChange={e => setEditGrade(e.target.value)}
-                            required
                           />
                         </td>
                         <td>
@@ -425,7 +508,6 @@ const GradeManagement = () => {
                   placeholder="Grade"
                   value={newGrade}
                   onChange={e => setNewGrade(e.target.value)}
-                  required
                 />
                 <input
                   type="text"
