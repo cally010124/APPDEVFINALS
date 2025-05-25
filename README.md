@@ -78,7 +78,7 @@ npm install
    ```
 
 5. Set up the database
-   - Create a MySQL database named `sgs_db`
+   - Create a MySQL database named `student_grading_system`
    - Import the schema from `database/schema.sql`
 
 ## Running the Application
@@ -86,7 +86,7 @@ npm install
 1. Start the backend server
 ```bash
 cd backend
-npm start
+node server.js
 ```
 
 2. Start the frontend development server
@@ -100,7 +100,7 @@ npm start
 ## Project Structure
 
 ```
-SGS/
+student_grading_system/
 ├── frontend/
 │   ├── public/
 │   └── src/
@@ -145,11 +145,26 @@ SGS/
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
+## References
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Lab Manual References
+1. **Application Development Laboratory Manual**
+   - Course: Application Development
+   - Topics Covered:
+     - React.js Fundamentals
+     - Node.js Backend Development
+     - MySQL Database Management
+     - RESTful API Design
+     - Authentication & Authorization
 
-## Contact
+2. **Database Management Systems Laboratory Manual**
+   - Course: Application Development
+   - Topics Covered:
+     - Database Design
+     - SQL Queries
+     - Data Normalization
+     - Database Security
 
-Your Name - your.email@example.com
-Project Link: [https://github.com/yourusername/student-grade-system](https://github.com/yourusername/student-grade-system) 
+
+Note: This project was developed as part of the Web Development Laboratory course, following the guidelines and requirements specified in the course manual. All implementations adhere to the academic standards and best practices outlined in the referenced materials.
+
