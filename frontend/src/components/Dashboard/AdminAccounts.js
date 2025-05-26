@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { useNavigate } from 'react-router-dom';
 
-const AdminAccounts = ({ role }) => {
+const AdminAccounts = () => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [newRole, setNewRole] = useState('admin');
   const [creating, setCreating] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editEmail, setEditEmail] = useState('');
@@ -48,14 +47,12 @@ const AdminAccounts = ({ role }) => {
       const token = localStorage.getItem('token');
       await axios.post('http://localhost:5000/api/admins', {
         email: newEmail,
-        password: newPassword,
-        role: newRole
+        password: newPassword
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNewEmail('');
       setNewPassword('');
-      setNewRole('admin');
       setLoading(true);
       await fetchAdmins();
     } catch (err) {
@@ -113,55 +110,41 @@ const AdminAccounts = ({ role }) => {
   return (
     <div>
       <h4>Admin Accounts Management</h4>
-      {role === 'admin' && (
-        <form className="mb-3" onSubmit={handleCreate}>
-          <div className="row g-2 align-items-center">
-            <div className="col-auto">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="New admin email"
-                value={newEmail}
-                onChange={e => setNewEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="col-auto">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={newPassword}
-                onChange={e => setNewPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="col-auto">
-              <select
-                className="form-control"
-                value={newRole}
-                onChange={e => setNewRole(e.target.value)}
-                required
-              >
-                <option value="admin">Admin</option>
-                <option value="professor">Professor</option>
-              </select>
-            </div>
-            <div className="col-auto">
-              <button className="btn btn-success" type="submit" disabled={creating}>
-                {creating ? 'Creating...' : 'Create Admin'}
-              </button>
-            </div>
+      <form className="mb-3" onSubmit={handleCreate}>
+        <div className="row g-2 align-items-center">
+          <div className="col-auto">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="New admin email"
+              value={newEmail}
+              onChange={e => setNewEmail(e.target.value)}
+              required
+            />
           </div>
-        </form>
-      )}
+          <div className="col-auto">
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Password"
+              value={newPassword}
+              onChange={e => setNewPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="col-auto">
+            <button className="btn btn-success" type="submit" disabled={creating}>
+              {creating ? 'Creating...' : 'Create Admin'}
+            </button>
+          </div>
+        </div>
+      </form>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <table className="table">
           <thead>
             <tr>
-              <th>Role</th>
               <th>Email</th>
               <th>Password</th>
               <th>Actions</th>
@@ -170,7 +153,6 @@ const AdminAccounts = ({ role }) => {
           <tbody>
             {admins.map(admin => (
               <tr key={admin.id}>
-                <td>{admin.role}</td>
                 <td>
                   {editId === admin.id ? (
                     <form className="d-flex" onSubmit={handleUpdate}>

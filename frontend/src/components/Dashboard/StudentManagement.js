@@ -1,3 +1,5 @@
+import axios from '../../axiosConfig';
+
 const generateStudentId = (course) => {
   const currentYear = new Date().getFullYear().toString().slice(-2); // Get last 2 digits of year
   const courseCode = course.toUpperCase();

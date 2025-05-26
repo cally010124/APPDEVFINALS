@@ -8,14 +8,14 @@ exports.login = async (req, res) => {
 
   if (password !== admin.password) return res.status(400).json({ message: 'Invalid credentials' });
 
-  const token = jwt.sign({ id: admin.id, role: admin.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
   res.json({ token });
 };
 
 exports.create = async (req, res) => {
-  const { email, password, role = 'admin' } = req.body;
-  const id = await Admin.create(email, password, role);
-  res.status(201).json({ id, email, password, role });
+  const { email, password } = req.body;
+  const id = await Admin.create(email, password);
+  res.status(201).json({ id, email, password });
 };
 
 exports.getAll = async (req, res) => {

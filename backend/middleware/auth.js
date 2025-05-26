@@ -12,7 +12,8 @@ exports.verifyToken = (req, res, next) => {
 };
 
 exports.isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') return next();
+  // If the user has a valid id, treat as admin (since only admins exist now)
+  if (req.user && req.user.id) return next();
   return res.status(403).json({ message: 'Admin access required' });
 };
 
