@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const { name, course, year, section } = req.body;
+  const { name, course, year, section } = req.body;
     const id = await Student.create(name, course, year, section);
     const student = await Student.findByStudentId(await Student.getNextStudentId(course));
     res.status(201).json(student);

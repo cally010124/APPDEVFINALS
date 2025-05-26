@@ -23,6 +23,8 @@ const GradeManagement = () => {
   const [copying, setCopying] = useState(false);
   const [sourceStudentId, setSourceStudentId] = useState('');
   const [targetStudentId, setTargetStudentId] = useState('');
+  const [sourceSearchInput, setSourceSearchInput] = useState('');
+  const [targetSearchInput, setTargetSearchInput] = useState('');
 
   // Add S.Y. state globally for the component, persisted in localStorage and synced with backend
   const LOCAL_STORAGE_SY_KEY = 'grades_sy_value';
@@ -312,6 +314,8 @@ const GradeManagement = () => {
     setCopying(false);
     setSourceStudentId('');
     setTargetStudentId('');
+    setSourceSearchInput('');
+    setTargetSearchInput('');
   };
 
   // Debug logs
@@ -323,16 +327,17 @@ const GradeManagement = () => {
     <div>
       <h4>Grades</h4>
       {/* Global S.Y. input - above search bar */}
-      <div className="d-flex justify-content-center mb-3 align-items-center">
+      <div className="d-flex justify-content-center align-items-center" style={{ marginBottom: '0.5rem', marginTop: '-0.5rem' }}>
         <label style={{ fontWeight: 'bold', marginRight: 8 }}>S.Y.:</label>
         <input
           type="text"
+          className="form-control"
+          style={{ maxWidth: 320, minWidth: 180, marginRight: 8 }}
           value={syInput}
           onChange={handleSyChange}
           onKeyDown={handleSyKeyDown}
           onBlur={handleSyBlur}
           placeholder={sy}
-          style={{ width: '260px', display: 'inline-block', marginRight: 8 }}
           disabled={syLoading}
         />
         {syLoading ? (
@@ -345,32 +350,156 @@ const GradeManagement = () => {
       {/* Copy Subjects Section */}
       <div className="row mb-3 justify-content-center">
         <div className="col-12 d-flex justify-content-center gap-2">
-          <select
-            className="form-control"
-            style={{ maxWidth: 200 }}
-            value={sourceStudentId}
-            onChange={(e) => setSourceStudentId(e.target.value)}
-          >
-            <option value="">Select Source Student</option>
-            {students.map(student => (
-              <option key={student.student_id} value={student.student_id}>
-                {student.name} ({student.student_id})
-              </option>
-            ))}
-          </select>
-          <select
-            className="form-control"
-            style={{ maxWidth: 200 }}
-            value={targetStudentId}
-            onChange={(e) => setTargetStudentId(e.target.value)}
-          >
-            <option value="">Select Target Student</option>
-            {students.map(student => (
-              <option key={student.student_id} value={student.student_id}>
-                {student.name} ({student.student_id})
-              </option>
-            ))}
-          </select>
+          <div className="d-flex flex-column gap-2" style={{ maxWidth: 200, position: 'relative' }}>
+            <div style={{ position: 'relative' }}>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="From (source student)"
+                value={sourceSearchInput}
+                onChange={e => {
+                  setSourceSearchInput(e.target.value);
+                  setSourceStudentId('');
+                }}
+                style={{ paddingRight: sourceStudentId ? 28 : undefined }}
+              />
+              {sourceStudentId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSourceStudentId('');
+                    setSourceSearchInput('');
+                  }}
+                  style={{
+                    position: 'absolute',
+                    right: 6,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#888',
+                    fontSize: 18,
+                    cursor: 'pointer',
+                    zIndex: 2
+                  }}
+                  aria-label="Clear source student"
+                >×</button>
+              )}
+              {sourceSearchInput && !sourceStudentId && students.filter(student => {
+                const searchTerm = sourceSearchInput.toLowerCase();
+                return (
+                  student.name?.toLowerCase().includes(searchTerm) ||
+                  student.student_id?.toLowerCase().includes(searchTerm) ||
+                  student.course?.toLowerCase().includes(searchTerm) ||
+                  student.year?.toLowerCase().includes(searchTerm) ||
+                  student.section?.toLowerCase().includes(searchTerm)
+                );
+              }).length > 0 && (
+                <div className="search-results">
+                  {students
+                    .filter(student => {
+                      const searchTerm = sourceSearchInput.toLowerCase();
+                      return (
+                        student.name?.toLowerCase().includes(searchTerm) ||
+                        student.student_id?.toLowerCase().includes(searchTerm) ||
+                        student.course?.toLowerCase().includes(searchTerm) ||
+                        student.year?.toLowerCase().includes(searchTerm) ||
+                        student.section?.toLowerCase().includes(searchTerm)
+                      );
+                    })
+                    .slice(0, 5)
+                    .map(student => (
+                      <div
+                        key={student.student_id}
+                        className="search-result-item"
+                        onClick={() => {
+                          setSourceStudentId(student.student_id);
+                          setSourceSearchInput(`${student.name} (${student.student_id}) - ${student.course} ${student.year}${student.section}`);
+                        }}
+                      >
+                        {student.name} ({student.student_id}) - {student.course} {student.year}{student.section}
+                      </div>
+                    ))
+                  }
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="d-flex flex-column gap-2" style={{ maxWidth: 200, position: 'relative' }}>
+            <div style={{ position: 'relative' }}>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="To (target student)"
+                value={targetSearchInput}
+                onChange={e => {
+                  setTargetSearchInput(e.target.value);
+                  setTargetStudentId('');
+                }}
+                style={{ paddingRight: targetStudentId ? 28 : undefined }}
+              />
+              {targetStudentId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTargetStudentId('');
+                    setTargetSearchInput('');
+                  }}
+                  style={{
+                    position: 'absolute',
+                    right: 6,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#888',
+                    fontSize: 18,
+                    cursor: 'pointer',
+                    zIndex: 2
+                  }}
+                  aria-label="Clear target student"
+                >×</button>
+              )}
+              {targetSearchInput && !targetStudentId && students.filter(student => {
+                const searchTerm = targetSearchInput.toLowerCase();
+                return (
+                  student.name?.toLowerCase().includes(searchTerm) ||
+                  student.student_id?.toLowerCase().includes(searchTerm) ||
+                  student.course?.toLowerCase().includes(searchTerm) ||
+                  student.year?.toLowerCase().includes(searchTerm) ||
+                  student.section?.toLowerCase().includes(searchTerm)
+                );
+              }).length > 0 && (
+                <div className="search-results">
+                  {students
+                    .filter(student => {
+                      const searchTerm = targetSearchInput.toLowerCase();
+                      return (
+                        student.name?.toLowerCase().includes(searchTerm) ||
+                        student.student_id?.toLowerCase().includes(searchTerm) ||
+                        student.course?.toLowerCase().includes(searchTerm) ||
+                        student.year?.toLowerCase().includes(searchTerm) ||
+                        student.section?.toLowerCase().includes(searchTerm)
+                      );
+                    })
+                    .slice(0, 5)
+                    .map(student => (
+                      <div
+                        key={student.student_id}
+                        className="search-result-item"
+                        onClick={() => {
+                          setTargetStudentId(student.student_id);
+                          setTargetSearchInput(`${student.name} (${student.student_id}) - ${student.course} ${student.year}${student.section}`);
+                        }}
+                      >
+                        {student.name} ({student.student_id}) - {student.course} {student.year}{student.section}
+                      </div>
+                    ))
+                  }
+                </div>
+              )}
+            </div>
+          </div>
           <button
             className="btn btn-primary"
             onClick={handleCopySubjects}

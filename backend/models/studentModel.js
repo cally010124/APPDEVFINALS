@@ -12,7 +12,7 @@ exports.create = async (name, course, year, section) => {
       'INSERT INTO students (student_id, name, course, year, section) VALUES (?, ?, ?, ?, ?)',
       [student_id, name, course, year, section]
     );
-    return result.insertId;
+  return result.insertId;
   } catch (err) {
     console.error('Error creating student:', err);
     throw err;
@@ -51,7 +51,7 @@ exports.getNextStudentId = async (course) => {
 
     let lastNumber = 0;
     if (rows.length > 0) {
-      const lastId = rows[0].student_id;
+  const lastId = rows[0].student_id;
       lastNumber = parseInt(lastId.split('-')[1]);
     }
 

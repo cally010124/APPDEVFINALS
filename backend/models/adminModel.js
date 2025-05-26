@@ -5,13 +5,13 @@ exports.findByEmail = async (email) => {
   return rows[0];
 };
 
-exports.create = async (email, password) => {
-  const [result] = await db.query('INSERT INTO admins (email, password) VALUES (?, ?)', [email, password]);
+exports.create = async (email, password, role = 'admin') => {
+  const [result] = await db.query('INSERT INTO admins (email, password, role) VALUES (?, ?, ?)', [email, password, role]);
   return result.insertId;
 };
 
 exports.getAll = async () => {
-  const [rows] = await db.query('SELECT id, email FROM admins');
+  const [rows] = await db.query('SELECT id, email, password, role FROM admins');
   return rows;
 };
 

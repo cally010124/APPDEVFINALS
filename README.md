@@ -63,7 +63,7 @@ npm install
 3. Install backend dependencies
 ```bash
 cd ../backend
-npm install
+node server.js
 ```
 
 4. Set up environment variables
@@ -78,7 +78,7 @@ npm install
    ```
 
 5. Set up the database
-   - Create a MySQL database named `student_grading_system`
+   - Create a MySQL database named `student grading system`
    - Import the schema from `database/schema.sql`
 
 ## Running the Application
@@ -100,7 +100,7 @@ npm start
 ## Project Structure
 
 ```
-student_grading_system/
+student grading system/
 ├── frontend/
 │   ├── public/
 │   └── src/
@@ -116,6 +116,38 @@ student_grading_system/
 └── database/
     └── schema.sql
 ```
+
+## Current Implementation Status
+
+### Backend Implementation
+- Basic server setup with Express.js
+- Directory structure established:
+  - `config/` - Configuration files
+  - `controllers/` - Route controllers
+  - `models/` - Database models
+  - `routes/` - API routes
+  - `middleware/` - Custom middleware
+- Server.js configured with basic Express setup
+
+### Frontend Implementation
+- React application initialized
+- Basic project structure:
+  - `public/` - Static assets
+  - `src/` - Source code
+- Package dependencies installed:
+  - React
+  - Material-UI
+  - Axios
+  - React Router
+  - JSPDF
+
+### Next Steps
+- Database schema implementation
+- Authentication system setup
+- API endpoint implementation
+- Frontend component development
+- Grade calculation logic
+- PDF report generation
 
 ## API Endpoints
 
@@ -148,8 +180,7 @@ student_grading_system/
 ## References
 
 ### Lab Manual References
-1. **Application Development Laboratory Manual**
-   - Course: Application Development
+1. **Web Development Laboratory Manual**
    - Topics Covered:
      - React.js Fundamentals
      - Node.js Backend Development
@@ -158,13 +189,11 @@ student_grading_system/
      - Authentication & Authorization
 
 2. **Database Management Systems Laboratory Manual**
-   - Course: Application Development
    - Topics Covered:
      - Database Design
      - SQL Queries
      - Data Normalization
      - Database Security
 
-
-Note: This project was developed as part of the Web Development Laboratory course, following the guidelines and requirements specified in the course manual. All implementations adhere to the academic standards and best practices outlined in the referenced materials.
+Note: This project was developed as part of the Application Development Laboratory course, following the guidelines and requirements specified in the course manual. All implementations adhere to the academic standards and best practices outlined in the referenced materials.
 

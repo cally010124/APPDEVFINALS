@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/adminModel');
 
@@ -7,18 +6,16 @@ exports.login = async (req, res) => {
   const admin = await Admin.findByEmail(email);
   if (!admin) return res.status(400).json({ message: 'Invalid credentials' });
 
-  const valid = await bcrypt.compare(password, admin.password);
-  if (!valid) return res.status(400).json({ message: 'Invalid credentials' });
+  if (password !== admin.password) return res.status(400).json({ message: 'Invalid credentials' });
 
-  const token = jwt.sign({ id: admin.id, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  const token = jwt.sign({ id: admin.id, role: admin.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
   res.json({ token });
 };
 
 exports.create = async (req, res) => {
-  const { email, password } = req.body;
-  const hash = await bcrypt.hash(password, 10);
-  const id = await Admin.create(email, hash);
-  res.status(201).json({ id, email });
+  const { email, password, role = 'admin' } = req.body;
+  const id = await Admin.create(email, password, role);
+  res.status(201).json({ id, email, password, role });
 };
 
 exports.getAll = async (req, res) => {
@@ -29,8 +26,7 @@ exports.getAll = async (req, res) => {
 exports.update = async (req, res) => {
   const { id } = req.params;
   const { email, password } = req.body;
-  const hash = await bcrypt.hash(password, 10);
-  await Admin.update(id, email, hash);
+  await Admin.update(id, email, password);
   res.json({ message: 'Admin updated' });
 };
 
