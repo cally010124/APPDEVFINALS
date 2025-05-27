@@ -122,7 +122,7 @@ const StudentAccounts = () => {
         searchTerms.some(term =>
           (student.name && student.name.toLowerCase().includes(term.toLowerCase())) ||
           (student.course && student.course.toLowerCase().includes(term.toLowerCase())) ||
-          (student.year && student.year.toLowerCase().includes(term.toLowerCase())) ||
+          (String(student.year).toLowerCase().includes(term.toLowerCase())) ||
           (student.section && student.section.toLowerCase().includes(term.toLowerCase())) ||
           (student.student_id && student.student_id.toLowerCase().includes(term.toLowerCase()))
     )

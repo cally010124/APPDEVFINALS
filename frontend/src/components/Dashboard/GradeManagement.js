@@ -126,7 +126,7 @@ const GradeManagement = () => {
         // Check if any of the student's fields match the search term
         const matchesName = student.name?.toLowerCase().includes(searchTerm);
         const matchesCourse = student.course?.toLowerCase().includes(searchTerm);
-        const matchesYear = student.year?.toLowerCase().includes(searchTerm);
+        const matchesYear = String(student.year).toLowerCase().includes(searchTerm);
         const matchesSection = student.section?.toLowerCase().includes(searchTerm);
         const matchesId = student.student_id?.toLowerCase().includes(searchTerm);
 
@@ -391,7 +391,7 @@ const GradeManagement = () => {
                   student.name?.toLowerCase().includes(searchTerm) ||
                   student.student_id?.toLowerCase().includes(searchTerm) ||
                   student.course?.toLowerCase().includes(searchTerm) ||
-                  student.year?.toLowerCase().includes(searchTerm) ||
+                  String(student.year).toLowerCase().includes(searchTerm) ||
                   student.section?.toLowerCase().includes(searchTerm)
                 );
               }).length > 0 && (
@@ -403,7 +403,7 @@ const GradeManagement = () => {
                         student.name?.toLowerCase().includes(searchTerm) ||
                         student.student_id?.toLowerCase().includes(searchTerm) ||
                         student.course?.toLowerCase().includes(searchTerm) ||
-                        student.year?.toLowerCase().includes(searchTerm) ||
+                        String(student.year).toLowerCase().includes(searchTerm) ||
                         student.section?.toLowerCase().includes(searchTerm)
                       );
                     })
@@ -466,7 +466,7 @@ const GradeManagement = () => {
                   student.name?.toLowerCase().includes(searchTerm) ||
                   student.student_id?.toLowerCase().includes(searchTerm) ||
                   student.course?.toLowerCase().includes(searchTerm) ||
-                  student.year?.toLowerCase().includes(searchTerm) ||
+                  String(student.year).toLowerCase().includes(searchTerm) ||
                   student.section?.toLowerCase().includes(searchTerm)
                 );
               }).length > 0 && (
@@ -478,7 +478,7 @@ const GradeManagement = () => {
                         student.name?.toLowerCase().includes(searchTerm) ||
                         student.student_id?.toLowerCase().includes(searchTerm) ||
                         student.course?.toLowerCase().includes(searchTerm) ||
-                        student.year?.toLowerCase().includes(searchTerm) ||
+                        String(student.year).toLowerCase().includes(searchTerm) ||
                         student.section?.toLowerCase().includes(searchTerm)
                       );
                     })
