@@ -70,16 +70,48 @@ node server.js
    - Create `.env` file in the backend directory
    - Add the following variables:
    ```
-   DB_HOST=localhost
-   DB_USER=your_mysql_username
-   DB_PASSWORD=your_mysql_password
-   DB_NAME=sgs_db
-   JWT_SECRET=your_jwt_secret
+  DB_HOST=localhost
+  DB_USER=root
+  DB_PASS=
+  DB_NAME=student_grading_system
+  JWT_SECRET=your_jwt_secret  
    ```
 
 5. Set up the database
-   - Create a MySQL database named `student grading system`
-   - Import the schema from `database/schema.sql`
+   - Create a MySQL database
+CREATE DATABASE student_grading_system;
+USE student_grading_system;
+
+    CREATE TABLE students (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        student_id VARCHAR(20) UNIQUE NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        course VARCHAR(100),
+        year INT,
+        section VARCHAR(50)
+    );
+
+    
+    CREATE TABLE admins (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL
+    );
+
+    
+    CREATE TABLE grades (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        student_id VARCHAR(20) NOT NULL,
+        subject_code VARCHAR(50),
+        subject VARCHAR(255),
+        grade DECIMAL(5, 2),
+        remarks VARCHAR(255),
+        units INT,
+        FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+    );
+
+INSERT INTO admins (email, password) VALUES ('admin@gm.com', '1234');
+
 
 ## Running the Application
 
