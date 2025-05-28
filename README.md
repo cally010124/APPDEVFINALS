@@ -70,11 +70,11 @@ node server.js
    - Create `.env` file in the backend directory
    - Add the following variables:
    ```
-  DB_HOST=localhost
-  DB_USER=root
-  DB_PASS=
-  DB_NAME=student_grading_system
-  JWT_SECRET=your_jwt_secret  
+   - DB_HOST=localhost
+   - DB_USER=root
+   - DB_PASS=
+   - DB_NAME=student_grading_system
+   - JWT_SECRET=your_jwt_secret  
    ```
 
 5. Set up the database
